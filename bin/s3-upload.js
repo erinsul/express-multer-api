@@ -4,9 +4,19 @@ const fs = require('fs');
 
 let filename = process.argv[2] || '';
 
-fs.readFile(filename, (err, data) => {
-  if (err) {
-    return console.error(err);
-  }
+const readFile = (filename) => {
+  return new Promise ((res, rej) => {
+    fs.readFile(filename, (err, data) => {
+      if (err) {
+        rej(err);
+      }
+      res(data);
+    });
+  });
+};
+
+readFile(filename)
+.then((data) => {
   console.log(`${filename} is ${data.length} bytes long`);
-});
+})
+.catch(console.error);
